@@ -19,7 +19,6 @@ const OrderSchema = mongoose.Schema(
           ref: 'Product',
           required: true,
         },
-        name: { type: String, trim: true },
         quantity: { type: Number, required: true, min: 1 },
       },
     ],

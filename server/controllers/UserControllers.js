@@ -28,7 +28,7 @@ module.exports.signUpUser = async (req, res) => {
   }
 };
 
-//2. Login
+//2. Login User
 module.exports.loginUser = async (req, res) => {
   try {
     const body = req.body;
@@ -62,11 +62,21 @@ module.exports.loginUser = async (req, res) => {
 
 module.exports.logOut = async (req, res) => {
   try {
-    const userId = req.user._id;
+    const { userId } = req.body;
+
+    if (!userId) {
+      res.status(403).json({ message: "User is required!" })
+    }
+    const user = await User.findOne({ _id: userId });
+
+    if (!user) {
+      return res.status(403).json({ message: "User is invalid" });
+    }
 
     await User.findByIdAndUpdate(userId, { token: null });
-    res.status(200).json({ message: 'LogOut Sccessfully' });
+
+    res.status(200).json({ message: 'Logged Out Sccessfully' });
   } catch (e) {
-    res.status(500).json({ message: 'Internal error', e });
+    res.status(500).json({ message: 'Internal error', error: e.message });
   }
 };

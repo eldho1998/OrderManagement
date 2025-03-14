@@ -49,8 +49,10 @@ module.exports.getAllOrders = async (req, res) => {
     }
 
     const order = await Order.find({ userId }).populate(
-      'items.productId',
-      'name image'
+      {
+        path: "items.productId",
+        select: "name image",
+      }
     );
     res.status(200).json({
       message: 'Successfully fetched all orders',
