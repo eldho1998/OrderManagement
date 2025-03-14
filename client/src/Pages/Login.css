@@ -1,0 +1,96 @@
+.user-login-main {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #f8f9fa;
+}
+
+.user-login-form {
+  background: white;
+  padding: 30px;
+  border-radius: 10px;
+  border: 1px solid #dcdcdc;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  width: 400px;
+  text-align: center;
+}
+
+h1 {
+  text-align: center;
+  color: #333;
+  margin-bottom: 10px;
+  font-size: 24px;
+}
+
+h2 {
+  text-align: center;
+  font-size: 18px;
+  color: #555;
+  margin-bottom: 10px;
+}
+
+h3 {
+  text-align: center;
+  font-size: 16px;
+  color: #777;
+}
+
+label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 6px;
+  color: #333;
+  text-align: left;
+}
+
+.ant-input {
+  width: 100%;
+  padding: 10px;
+  font-size: 14px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  margin-bottom: 15px;
+}
+
+.bt {
+  margin-top: 15px;
+}
+
+.bt .ant-btn-primary {
+  width: 100%;
+  background-color: #007bff;
+  border: none;
+  padding: 10px;
+  font-size: 16px;
+  font-weight: bold;
+  border-radius: 5px;
+}
+
+.bt .ant-btn-primary:hover {
+  background-color: #0056b3;
+}
+
+.backto-main {
+  text-align: center;
+  margin-top: 10px;
+}
+
+.backto-main p {
+  color: #007bff;
+  font-size: 14px;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.backto-main p:hover {
+  color: #0056b3;
+}
+
+@media (max-width: 480px) {
+  .user-login-form {
+    width: 90%;
+    padding: 20px;
+  }
+}
