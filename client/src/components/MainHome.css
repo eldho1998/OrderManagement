@@ -85,3 +85,30 @@
   border-radius: 15px;
   box-shadow: 0 0 5px 5px rgb(228, 222, 222);
 }
+
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 16px;
+}
+
+.product-card {
+  border: 1px solid #ddd;
+  padding: 10px;
+  text-align: center;
+}
+
+.pagination {
+  position: relative;
+  bottom: 70px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 100px;
+}
+
+button {
+  padding: 8px 10px;
+  cursor: pointer;
+}
