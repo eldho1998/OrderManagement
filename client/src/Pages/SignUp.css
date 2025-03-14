@@ -79,3 +79,33 @@ label {
     padding: 20px;
   }
 }
+@media (max-width: 1366px) {
+  .user-signup-main {
+    width: 400px;
+    height: 500px;
+    padding: 30px;
+  }
+  .user-form {
+    height: 400px;
+  }
+
+  .ant-input {
+    padding: 10px;
+    font-size: 14px;
+    height: 30px;
+  }
+}
+
+@media (max-width: 1200px) {
+  .user-signup-main {
+    width: 380px;
+    padding: 25px;
+  }
+}
+
+@media (max-width: 768px) {
+  .user-signup-main {
+    width: 90%;
+    padding: 20px;
+  }
+}
