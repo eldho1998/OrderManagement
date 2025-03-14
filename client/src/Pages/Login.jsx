@@ -18,18 +18,12 @@ const LoginPage = () => {
   const onChange = (e, key) => {
     setUserLogin({ ...userLogin, [key]: e.target.value });
   };
-  console.log(userLogin);
 
   const OnUserLoginClick = async () => {
     try {
       const response = await axios.post("/user/login", userLogin);
-      console.log(response);
-      console.log(response.data.id);
-      console.log(response.data.token);
-
       localStorage.setItem("ID", response.data.id);
       localStorage.setItem("token", response.data.token);
-
       navigate("/user/home");
     } catch (e) {
       toast.error("Email or Password incorrect", e);

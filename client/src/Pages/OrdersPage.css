@@ -1,0 +1,31 @@
+.ordersPage {
+  padding: 20px;
+  max-width: 800px;
+  margin: auto;
+}
+
+.order-lists {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.order-card {
+  border: 1px solid #ddd;
+  padding: 15px;
+  border-radius: 5px;
+  background-color: #f9f9f9;
+}
+
+.order-card h3 {
+  margin: 0;
+  color: #333;
+}
+
+.order-card p {
+  margin: 5px 0;
+}
+
+.order-card ul {
+  padding-left: 20px;
+}

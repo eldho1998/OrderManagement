@@ -30,9 +30,9 @@ module.exports.bootstrapProducts = async (req, res) => {
         ];
         await Product.deleteMany({});
 
-        await Product.insertMany(products);
+        const insertedProducts = await Product.insertMany(products);
 
-        res.status(201).json({ message: "Products bootstrapped successfully!", products });
+        res.status(201).json({ message: "Products bootstrapped successfully!", products: insertedProducts });
     } catch (e) {
         res.status(500).json({ error: "Failed to bootstrap products", details: e.message });
     }

@@ -1,10 +1,10 @@
 import "./HomePage.css";
-import SignUp from "../Pages/SignUp";
+import MainHome from "../components/MainHome";
 
 const HomePage = () => {
   return (
     <div className="homePage">
-      <SignUp />
+      <MainHome />
     </div>
   );
 };
