@@ -15,19 +15,19 @@ Backend: Node.js, Express.js, MongoDB
 Database: MongoDB
 Tools: Postman
 
-###Installation & Setup
+#### Installation & Setup
 1️⃣ Clone the Repository
 git clone https://github.com/eldho1998/OrderManagement
 
 npm install
 npm init
 
-####For Backend Run
+#### For Backend Run
 cd server
 npm install
 npm run dev
 
-####For Frontend Run
+#### For Frontend Run
 cd client
 npm install
 npm run dev
