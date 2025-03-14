@@ -1,11 +1,24 @@
 import './OrdersPage.css';
 import axios from '../utils/axios';
 import { useEffect, useState } from 'react';
-import { message } from 'antd';
+import { message, Modal } from 'antd';
+import { DeleteOutlined } from '@ant-design/icons';
 
 const OrdersPage = () => {
   const [orders, setOrders] = useState([]);
+  const [modalOpen, setModalOpen] = useState(false);
+  const [selectedOrderId, setSelectedOrderId] = useState(null);
   const [messageApi, contextHolder] = message.useMessage();
+
+  const openModal = _id => {
+    setSelectedOrderId(_id);
+    setModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setModalOpen(false);
+    setSelectedOrderId(null);
+  };
 
   const fetchOrders = async () => {
     const userId = localStorage.getItem('ID');
@@ -31,6 +44,22 @@ const OrdersPage = () => {
         content: 'Unable to load Orders now!',
       });
     }
+  };
+
+  const deleteOrder = async () => {
+    if (!selectedOrderId) return;
+    try {
+      await axios.delete(`/order/${selectedOrderId}`);
+      setOrders(orders.filter(order => order._id !== selectedOrderId));
+      messageApi.open({
+        type: 'success',
+        content: 'Order deleted successfully!',
+      });
+    } catch (error) {
+      messageApi.open({ type: 'error', content: 'Failed to delete order!' });
+    }
+
+    closeModal();
   };
 
   useEffect(() => {
@@ -77,6 +106,20 @@ const OrdersPage = () => {
                         ) : (
                           <p>No Image Available</p>
                         )}
+                        <div
+                          onClick={() => openModal(order._id)}
+                          className="delete"
+                        >
+                          <DeleteOutlined />
+                        </div>
+                        <Modal
+                          title="Confirm Delete!"
+                          open={modalOpen}
+                          onOk={deleteOrder}
+                          onCancel={closeModal}
+                        >
+                          <p>Are you sure you want to delete the order?</p>
+                        </Modal>
                       </div>
                     </div>
                   );

@@ -3,6 +3,9 @@
   max-width: 800px;
   margin: auto;
 }
+.ordersPage h2 {
+  color: brown;
+}
 
 .order-lists {
   display: flex;
@@ -37,4 +40,8 @@
   border-radius: 8px;
   background-size: cover;
   background-repeat: no-repeat;
+}
+.delete {
+  text-align: end;
+  cursor: pointer;
 }

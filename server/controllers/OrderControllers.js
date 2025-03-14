@@ -89,7 +89,6 @@ module.exports.deleteOrder = async (req, res) => {
   try {
     const order = await Order.findOneAndDelete({
       _id: req.params.orderId,
-      userId: req.user.id,
     });
     if (!order) return res.status(404).json({ error: 'Order not found' });
 
