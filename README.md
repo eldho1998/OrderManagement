@@ -32,4 +32,9 @@ cd client
 npm install
 npm run dev
 
+#### Author
+👤 Eldhose Kurian
+📧 eldhosekurian9809@gmail.com
+🔗 https://github.com/eldho1998
+
 
