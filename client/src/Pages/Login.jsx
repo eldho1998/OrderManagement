@@ -1,16 +1,16 @@
-import "./Login.css";
-import { Button, Input } from "antd";
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import axios from "../utils/axios";
-import { Bounce, ToastContainer, toast } from "react-toastify";
-import React, { useRef } from "react";
+import './Login.css';
+import { Button, Input, message } from 'antd';
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import axios from '../utils/axios';
+import React, { useRef } from 'react';
 
 const LoginPage = () => {
   const navigate = useNavigate();
+  const [messageApi, contextHolder] = message.useMessage();
   const [userLogin, setUserLogin] = useState({
-    email: "",
-    password: "",
+    email: '',
+    password: '',
   });
   const passwordRef = useRef(null);
   const loginRef = useRef(null);
@@ -21,34 +21,41 @@ const LoginPage = () => {
 
   const OnUserLoginClick = async () => {
     try {
-      const response = await axios.post("/user/login", userLogin);
-      localStorage.setItem("ID", response.data.id);
-      localStorage.setItem("token", response.data.token);
-      navigate("/user/home");
+      const response = await axios.post('/user/login', userLogin);
+      localStorage.setItem('ID', response.data.id);
+      localStorage.setItem('token', response.data.token);
+      messageApi.open({
+        type: 'success',
+        content: 'Log In Success!',
+      });
+      setTimeout(() => navigate('/user/home'), 2000);
     } catch (e) {
-      toast.error("Email or Password incorrect", e);
+      messageApi.open({
+        type: 'error',
+        content: 'Log In Failed!',
+      });
     }
   };
 
   const backToMain = () => {
-    navigate("/");
+    navigate('/');
   };
 
-  const handleEmailKeyPress = (e) => {
-    if (e.key === "Enter") {
+  const handleEmailKeyPress = e => {
+    if (e.key === 'Enter') {
       passwordRef.current.focus();
     }
   };
 
-  const handlePasswordPress = (e) => {
-    if (e.key === "Enter") {
+  const handlePasswordPress = e => {
+    if (e.key === 'Enter') {
       loginRef.current.focus();
     }
   };
 
   return (
     <div className="user-login-main">
-      <ToastContainer theme="light" transition={Bounce} />
+      {contextHolder}
       <h1>You can now Login</h1>
 
       <div className="user-login-form">
@@ -57,7 +64,7 @@ const LoginPage = () => {
             <label>Email</label>
             <Input
               onKeyDown={handleEmailKeyPress}
-              onChange={(e) => onChange(e, "email")}
+              onChange={e => onChange(e, 'email')}
               type="email"
               placeholder="example@gmail.com"
             />
@@ -68,7 +75,7 @@ const LoginPage = () => {
             <Input
               ref={passwordRef}
               onKeyDown={handlePasswordPress}
-              onChange={(e) => onChange(e, "password")}
+              onChange={e => onChange(e, 'password')}
               type="password"
               placeholder="enter your password"
             />

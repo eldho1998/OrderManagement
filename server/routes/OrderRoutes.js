@@ -3,7 +3,7 @@ const router = express.Router();
 const controller = require('../controllers/OrderControllers');
 
 router.post('/create', controller.createOrder);
-router.get('/lists/:userId', controller.getAllOrder);
+router.get('/', controller.getAllOrders);
 router.put('/:id/status', controller.updateOrderStatus);
 router.delete('/:id', controller.deleteOrder);
 

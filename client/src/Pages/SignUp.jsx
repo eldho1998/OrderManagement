@@ -1,19 +1,19 @@
-import "./SignUp.css";
-import { Input, Button } from "antd";
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { ToastContainer, toast } from "react-toastify";
-import { useRef } from "react";
-import axios from "../utils/axios";
+import './SignUp.css';
+import { Input, Button, message } from 'antd';
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useRef } from 'react';
+import axios from '../utils/axios';
 
 const SignUp = () => {
   const navigate = useNavigate();
+  const [messageApi, contextHolder] = message.useMessage();
   const [userSignUp, setUserSignUp] = useState({
-    firstName: "",
-    lastName: "",
-    email: "",
-    password: "",
-    confirmPassword: "",
+    firstName: '',
+    lastName: '',
+    email: '',
+    password: '',
+    confirmPassword: '',
   });
 
   const lastNameRef = useRef(null);
@@ -29,22 +29,28 @@ const SignUp = () => {
 
   const onUserSignUpClick = async () => {
     try {
-      const response = await axios.post("/user/signup", userSignUp);
+      const response = await axios.post('/user/signup', userSignUp);
       console.log(response);
-      localStorage.setItem("ID", response.data.id);
-      navigate("/user/login");
-      toast("signed in successfully");
+      localStorage.setItem('ID', response.data.id);
+      messageApi.open({
+        type: 'success',
+        content: 'Sign In Successfully!',
+      });
+      setTimeout(() => navigate('/user/login'), 2000);
     } catch (e) {
-      toast.error("Sign Up Failed", e);
+      messageApi.open({
+        type: 'error',
+        content: 'Sign In Failed!',
+      });
     }
   };
 
   const onLoginClick = () => {
-    navigate("/user/login");
+    navigate('/user/login');
   };
 
   const handleKeyDown = (e, nextInputRef, isFinalField = false) => {
-    if (e.key === "Enter") {
+    if (e.key === 'Enter') {
       e.preventDefault();
       if (isFinalField) {
         onUserSignUpClick();
@@ -57,21 +63,22 @@ const SignUp = () => {
   return (
     <div className="main-sign">
       <h3>Please Sign In</h3>
+      {contextHolder}
       <div className="user-signup-main">
         <div className="user-form">
           <div className="flname">
             <form>
               <label>First Name</label>
               <Input
-                onKeyDown={(e) => handleKeyDown(e, lastNameRef)}
-                onChange={(e) => onChange(e, "firstName")}
+                onKeyDown={e => handleKeyDown(e, lastNameRef)}
+                onChange={e => onChange(e, 'firstName')}
                 type="text"
               />
               <label>Last Name</label>
               <Input
                 ref={lastNameRef}
-                onKeyDown={(e) => handleKeyDown(e, emailRef)}
-                onChange={(e) => onChange(e, "lastName")}
+                onKeyDown={e => handleKeyDown(e, emailRef)}
+                onChange={e => onChange(e, 'lastName')}
                 type="text"
               />
             </form>
@@ -82,8 +89,8 @@ const SignUp = () => {
               <label>Email</label>
               <Input
                 ref={emailRef}
-                onKeyDown={(e) => handleKeyDown(e, passwordRef)}
-                onChange={(e) => onChange(e, "email")}
+                onKeyDown={e => handleKeyDown(e, passwordRef)}
+                onChange={e => onChange(e, 'email')}
                 placeholder="example@gmail.com"
               />
             </form>
@@ -94,8 +101,8 @@ const SignUp = () => {
               <label>Password</label>
               <Input
                 ref={passwordRef}
-                onKeyDown={(e) => handleKeyDown(e, confirmPasswordRef)}
-                onChange={(e) => onChange(e, "password")}
+                onKeyDown={e => handleKeyDown(e, confirmPasswordRef)}
+                onChange={e => onChange(e, 'password')}
                 type="password"
               />
             </form>
@@ -106,8 +113,8 @@ const SignUp = () => {
               <label>Confirm Password</label>
               <Input
                 ref={confirmPasswordRef}
-                onKeyDown={(e) => handleKeyDown(e, null, true)}
-                onChange={(e) => onChange(e, "confirmPassword")}
+                onKeyDown={e => handleKeyDown(e, null, true)}
+                onChange={e => onChange(e, 'confirmPassword')}
                 type="password"
               />
             </form>
@@ -118,7 +125,6 @@ const SignUp = () => {
               SignUp
             </Button>
           </div>
-          <ToastContainer />
         </div>
         <div className="already">
           <h5>Already have an account?</h5>
