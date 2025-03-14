@@ -1,5 +1,5 @@
 import "./HomePage.css";
-import MainHome from "../components/MainHome";
+import MainHome from "../Pages/MainHome";
 
 const HomePage = () => {
   return (
