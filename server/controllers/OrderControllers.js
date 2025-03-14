@@ -41,7 +41,7 @@ module.exports.createOrder = async (req, res) => {
   }
 };
 
-module.exports.getAllOrder = async (req, res) => {
+module.exports.getAllOrders = async (req, res) => {
   try {
     const { userId } = req.query;
     if (!userId) {
