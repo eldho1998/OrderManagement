@@ -63,6 +63,8 @@ This is a MERN Stack-based E-Commerce application where users can view products 
 - @ant-design/icons
 - axios
 
+### Use MongoDB for database Management
+
 #### Author
 
 - 👤 Eldhose Kurian
