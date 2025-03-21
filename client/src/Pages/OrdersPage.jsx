@@ -7,6 +7,7 @@ import { useCallback } from "react";
 
 const OrdersPage = () => {
   const [orders, setOrders] = useState([]);
+  const userId = localStorage.getItem("ID");
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedOrderId, setSelectedOrderId] = useState(null);
   const [messageApi, contextHolder] = message.useMessage();
@@ -22,7 +23,6 @@ const OrdersPage = () => {
   };
 
   const fetchOrders = useCallback(async () => {
-    const userId = localStorage.getItem("ID");
     if (!userId) {
       messageApi.open({
         type: "error",
@@ -32,9 +32,9 @@ const OrdersPage = () => {
     }
 
     try {
-      const response = await axios.get(`/order?userId=${userId}`);
+      const response = await axios.get(`/order/${userId}`);
       console.log("Orders:", response.data.order);
-      setOrders(response.data.order);
+      setOrders(response.data.order || []);
       messageApi.open({
         type: "success",
         content: "Your Orders!",
@@ -46,7 +46,7 @@ const OrdersPage = () => {
         content: "Unable to load Orders now!",
       });
     }
-  }, [messageApi]);
+  }, [userId, messageApi]);
 
   const deleteOrder = async () => {
     if (!selectedOrderId) return;
@@ -91,7 +91,7 @@ const OrdersPage = () => {
                   return (
                     <div key={item._id} className="order-item">
                       <p>
-                        <strong>Product ID:</strong> {product?._id || "N/A"}
+                        <strong>Product ID:</strong> {product._id || "N/A"}
                       </p>
                       <p>
                         <strong>Quantity:</strong> {item.quantity}

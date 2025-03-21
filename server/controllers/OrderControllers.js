@@ -5,45 +5,45 @@ const mongoose = require('mongoose');
 module.exports.createOrder = async (req, res) => {
   try {
     const { userId, items } = req.body;
+
     if (!userId || !items || items.length === 0) {
       return res.status(400).json({ error: 'Invalid request data' });
     }
 
-    let totalPrice = 0;
+    const formattedItems = items
+      .filter(item => item.productId)
+      .map(item => ({
+        productId: new mongoose.Types.ObjectId(item.productId),
+        quantity: item.quantity,
+      }));
 
-    const orderItems = await Promise.all(
-      items.map(async item => {
-        const product = await Product.findById(item.productId);
-        if (!product) throw new Error(`Product not found: ${item.productId}`);
+    if (formattedItems.length === 0) {
+      return res.status(400).json({ error: "Order must have at least one valid item." });
+    }
 
-        totalPrice += product.price * item.quantity;
-        return {
-          productId: item.productId,
-          quantity: item.quantity,
-          price: product.price,
-        };
-      })
-    );
+
     const newOrder = new Order({
-      userId,
-      items: orderItems,
-      totalPrice,
-      status: 'Shipped',
+      userId: new mongoose.Types.ObjectId(userId),
+      items: formattedItems,
+      status: 'Pending',
     });
+
     await newOrder.save();
 
-    res
-      .status(201)
-      .json({ message: 'Order created successfully', order: newOrder });
+    res.status(201).json({
+      message: 'Order created successfully',
+      order: newOrder,
+    });
+
   } catch (e) {
     console.error('Order creation error:', e.message);
     res.status(400).json({ error: e.message });
   }
 };
 
-module.exports.getAllOrders = async (req, res) => {
+module.exports.getAllOrdersByUserId = async (req, res) => {
   try {
-    const { userId } = req.query;
+    const { userId } = req.params;
     if (!userId) {
       return res.status(400).json({ error: 'User ID is required' });
     }
@@ -51,9 +51,18 @@ module.exports.getAllOrders = async (req, res) => {
     const order = await Order.find({ userId }).populate(
       {
         path: "items.productId",
-        select: "name image",
+        select: "name image price",
       }
-    );
+    )
+      .lean();
+
+    if (!order.length) {
+      return res.status(404).json({
+        success: false,
+        message: "No orders found for this user",
+      });
+    }
+
     res.status(200).json({
       message: 'Successfully fetched all orders',
       success: true,

@@ -32,7 +32,7 @@ const MainHome = () => {
     }
   }, [page, messageApi]);
 
-  const orderProduct = async (productId, productName) => {
+  const orderProduct = async (productId) => {
     const userId = localStorage.getItem("ID");
 
     if (!userId) {
@@ -44,17 +44,19 @@ const MainHome = () => {
     }
 
     try {
+      messageApi.open({
+        type: "loading",
+        content: "Placing your order...",
+        duration: 1,
+      });
+
       const response = await axios.post("/order/create", {
-        userId,
-        items: [{ productId, name: productName, quantity: 1 }],
+        userId: userId.trim(),
+        items: [{ productId, quantity: 1 }],
       });
       messageApi.open({
         type: "success",
-        content: "Order placed Successfully!",
-      });
-      messageApi.open({
-        type: "success",
-        content: "Go to Orders to see your orders!",
+        content: "Order placed successfully! Go to Orders to see details",
       });
       console.log("Order response:", response.data);
     } catch (error) {
@@ -120,7 +122,7 @@ const MainHome = () => {
           {product.length > 0 ? (
             <div className="list">
               {product.map((product) => (
-                <div className="pro">
+                <div className="pro" key={product._id}>
                   <img
                     src={`/products/${product.image}`}
                     alt={product.name}
