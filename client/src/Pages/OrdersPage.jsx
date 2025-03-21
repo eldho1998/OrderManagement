@@ -1,9 +1,9 @@
-import "./OrdersPage.css";
-import axios from "../utils/axios";
-import { useEffect, useState } from "react";
-import { message, Modal } from "antd";
-import { DeleteOutlined } from "@ant-design/icons";
-import { useCallback } from "react";
+import './OrdersPage.css';
+import axios from '../utils/axios';
+import { useEffect, useState } from 'react';
+import { message, Modal } from 'antd';
+import { DeleteOutlined } from '@ant-design/icons';
+import { useCallback } from 'react';
 
 const OrdersPage = () => {
   const [orders, setOrders] = useState([]);
@@ -11,7 +11,7 @@ const OrdersPage = () => {
   const [selectedOrderId, setSelectedOrderId] = useState(null);
   const [messageApi, contextHolder] = message.useMessage();
 
-  const openModal = (_id) => {
+  const openModal = _id => {
     setSelectedOrderId(_id);
     setModalOpen(true);
   };
@@ -22,28 +22,28 @@ const OrdersPage = () => {
   };
 
   const fetchOrders = useCallback(async () => {
-    const userId = localStorage.getItem("ID");
+    const userId = localStorage.getItem('ID');
     if (!userId) {
       messageApi.open({
-        type: "error",
-        content: "You are not Authorized!",
+        type: 'error',
+        content: 'You are not Authorized!',
       });
       return;
     }
 
     try {
-      const response = await axios.get(`/order?userId=${userId}`);
-      console.log("Orders:", response.data.order);
+      const response = await axios.get(`/order/${userId}`);
+      console.log('Orders:', response.data.order);
       setOrders(response.data.order);
       messageApi.open({
-        type: "success",
-        content: "Your Orders!",
+        type: 'success',
+        content: 'Your Orders!',
       });
     } catch (e) {
       console.log(e);
       messageApi.open({
-        type: "error",
-        content: "Unable to load Orders now!",
+        type: 'error',
+        content: 'Unable to load Orders now!',
       });
     }
   }, [messageApi]);
@@ -52,14 +52,14 @@ const OrdersPage = () => {
     if (!selectedOrderId) return;
     try {
       await axios.delete(`/order/${selectedOrderId}`);
-      setOrders(orders.filter((order) => order._id !== selectedOrderId));
+      setOrders(orders.filter(order => order._id !== selectedOrderId));
       messageApi.open({
-        type: "success",
-        content: "Order deleted successfully!",
+        type: 'success',
+        content: 'Order deleted successfully!',
       });
     } catch (e) {
       console.log(e);
-      messageApi.open({ type: "error", content: "Failed to delete order!" });
+      messageApi.open({ type: 'error', content: 'Failed to delete order!' });
     }
 
     closeModal();
@@ -75,35 +75,38 @@ const OrdersPage = () => {
       {contextHolder}
       <div className="order-lists">
         {orders.length > 0 ? (
-          orders.map((order) => (
+          orders.map(order => (
             <div key={order._id} className="order-card">
               <h3>Order Status: {order.status}</h3>
               <p>
                 <strong>Order ID:</strong> {order.orderId}
               </p>
-              <p>
-                <strong>Total Price:</strong> ${order.totalPrice}
-              </p>
               <h4>Items:</h4>
               <div>
-                {order.items.map((item) => {
-                  const product = item.productId || {};
+                {order.items.map(item => {
+                  const product =
+                    item.productId && typeof item.productId === 'object'
+                      ? item.productId
+                      : item;
                   return (
                     <div key={item._id} className="order-item">
                       <p>
-                        <strong>Product ID:</strong> {product?._id || "N/A"}
+                        <strong>Product ID:</strong> {product?._id || 'N/A'}
                       </p>
                       <p>
                         <strong>Quantity:</strong> {item.quantity}
                       </p>
                       <p>
-                        <strong>Name:</strong> {product?.name || "N/A"}
+                        <strong>Name:</strong> {product?.name || 'N/A'}
+                      </p>
+                      <p>
+                        <strong>Price:</strong> ${product?.price || 'N/A'}
                       </p>
                       <div className="image">
-                        {product?.image ? (
+                        {product.image ? (
                           <img
-                            src={product.image}
-                            alt={product.name || "Product"}
+                            src={`/products/${product.image}`}
+                            alt={product.name || 'Product'}
                             className="product-image"
                           />
                         ) : (

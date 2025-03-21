@@ -1,38 +1,59 @@
 const Order = require('../db/models/OrderSchema');
 const Product = require('../db/models/ProductSchema');
-const mongoose = require('mongoose');
 
 module.exports.createOrder = async (req, res) => {
   try {
     const { userId, items } = req.body;
+
     if (!userId || !items || items.length === 0) {
       return res.status(400).json({ error: 'Invalid request data' });
     }
 
-    let totalPrice = 0;
+    const userOrders = await Order.find({ userId });
+
+    const orderedProductIds = new Set();
+    userOrders.forEach(order => {
+      order.items.forEach(item => {
+        if (item.productId) {
+          orderedProductIds.add(item.productId.toString());
+        }
+      });
+    });
+
+    const isDuplicate = items.some(item =>
+      orderedProductIds.has(item.productId?.toString())
+    );
+
+    if (isDuplicate) {
+      return res.status(400).json({ error: 'This product is already Ordered' });
+    }
 
     const orderItems = await Promise.all(
       items.map(async item => {
         const product = await Product.findById(item.productId);
-        if (!product) throw new Error(`Product not found: ${item.productId}`);
-
-        totalPrice += product.price * item.quantity;
+        if (!product) {
+          throw new Error(`Product not found: ${item.productId}`);
+        }
         return {
-          productId: item.productId,
-          quantity: item.quantity,
+          productId: product._id.toString(),
+          name: product.name,
           price: product.price,
+          description: product.description,
+          image: product.image,
+          quantity: item.quantity,
         };
       })
     );
+
     const newOrder = new Order({
       userId,
       items: orderItems,
-      totalPrice,
-      status: 'Shipped',
+      status: 'Pending',
     });
+
     await newOrder.save();
 
-    res
+    return res
       .status(201)
       .json({ message: 'Order created successfully', order: newOrder });
   } catch (e) {
@@ -41,19 +62,17 @@ module.exports.createOrder = async (req, res) => {
   }
 };
 
-module.exports.getAllOrders = async (req, res) => {
+module.exports.getAllOrdersByUserId = async (req, res) => {
   try {
-    const { userId } = req.query;
+    const { userId } = req.params;
     if (!userId) {
       return res.status(400).json({ error: 'User ID is required' });
     }
 
-    const order = await Order.find({ userId }).populate(
-      {
-        path: "items.productId",
-        select: "name image",
-      }
-    );
+    const order = await Order.find({ userId }).populate({
+      path: 'items.productId',
+      select: 'name image, price',
+    });
     res.status(200).json({
       message: 'Successfully fetched all orders',
       success: true,

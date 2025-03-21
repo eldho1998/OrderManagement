@@ -90,9 +90,14 @@ module.exports.bootstrapProducts = async (req, res) => {
         image: 'powerbank.png',
       },
     ];
-    await Product.deleteMany({});
 
-    await Product.insertMany(products);
+    for (const product of products) {
+      await Product.updateOne(
+        { name: product.name },
+        { $set: product },
+        { upsert: true }
+      );
+    }
 
     const page = parseInt(req.query.page) || 1;
     const limit = parseInt(req.query.limit) || 6;

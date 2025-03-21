@@ -33,15 +33,14 @@
   padding-left: 20px;
 }
 
-.image img {
-  max-width: 100%;
-  max-height: 100%;
-  object-fit: contain;
-  border-radius: 8px;
-  background-size: cover;
-  background-repeat: no-repeat;
-}
 .delete {
   text-align: end;
   cursor: pointer;
+}
+.product-image {
+  width: 100%;
+  height: 200px;
+  object-fit: contain;
+  border-radius: 8px;
+  background-size: cover;
 }
